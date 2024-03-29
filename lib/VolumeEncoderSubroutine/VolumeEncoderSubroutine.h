@@ -12,6 +12,9 @@ class VolumeEncoderSubroutine {
       byte _inputCLK;
       byte _inputDT;
       byte _inputSW;
+      byte _currentStateSW;
+      byte _lastButtonPress;
+      byte  _muteClickFlag;
       int  _currentStateCLK;
       int  _previousStateCLK;
       void rotateRight();

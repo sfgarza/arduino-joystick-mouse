@@ -29,7 +29,7 @@ void VolumeEncoderSubroutine::run() {
 	_currentStateCLK = digitalRead(_inputCLK);
 
 	// If the previous and the current state of the inputCLK are different then a pulse has occured
-	if (_currentStateCLK != _previousStateCLK){
+	if (_currentStateCLK != _previousStateCLK && !_muteClickFlag){
 		// If the inputDT state is different than the inputCLK state then
 		// the encoder is rotating counterclockwise
 		if (digitalRead(_inputDT) != _currentStateCLK) {
@@ -40,6 +40,22 @@ void VolumeEncoderSubroutine::run() {
 	}
 	// Update previousStateCLK with the current state
 	_previousStateCLK = _currentStateCLK;
+
+    //Mute
+    _currentStateSW = digitalRead(_inputSW); // Button Value
+
+    if (_currentStateSW == LOW)
+    { // Switch pushed
+		_muteClickFlag = 1;
+        if (millis() - _lastButtonPress > 2000)
+        { // Over 50ms
+            Consumer.write(MEDIA_VOLUME_MUTE);
+        }
+        _lastButtonPress = millis();
+    }else{
+		_muteClickFlag = 0;
+	}
+
 }
 
 void VolumeEncoderSubroutine::rotateRight() {
