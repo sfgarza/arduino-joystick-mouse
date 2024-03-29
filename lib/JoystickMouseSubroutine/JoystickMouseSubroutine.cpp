@@ -10,14 +10,16 @@
    into an HID Mouse. The select button on the joystick is set up
    as the mouse left click.
 */
-#include <Mouse.h>
-#include <JoystickMouseSubroutine.h>
+#include "Arduino.h"
+#include "HID-Project.h"
+#include "JoystickMouseSubroutine.h"
 
-JoystickMouseSubroutine::JoystickMouseSubroutine(uint8_t horzPin, uint8_t vertPin, uint8_t selPin, int invertMouse){
+JoystickMouseSubroutine::JoystickMouseSubroutine(uint8_t horzPin, uint8_t vertPin, uint8_t selPin, int invertMouse, int sensitivity){
     _horzPin = horzPin;
     _vertPin = vertPin;
     _selPin = selPin;
     _invertMouse = invertMouse;
+    _sensitivity = sensitivity;
 }
 
 void JoystickMouseSubroutine::init()
@@ -39,9 +41,9 @@ void JoystickMouseSubroutine::run()
   _horzValue = analogRead(_horzPin) - _horzZero;  // read horizontal offset
 
   if (_vertValue != 0)
-    Mouse.move(0, (_invertMouse * (_vertValue / SENSITIVITY)), 0); // move mouse on y axis
+    Mouse.move(0, (_invertMouse * (_vertValue / _sensitivity)), 0); // move mouse on y axis
   if (_horzValue != 0)
-    Mouse.move((_invertMouse * (_horzValue / SENSITIVITY)), 0, 0); // move mouse on x axis
+    Mouse.move((_invertMouse * (_horzValue / _sensitivity)), 0, 0); // move mouse on x axis
 
   if ((digitalRead(_selPin) == 0) && (!_mouseClickFlag))  // if the joystick button is pressed
   {
