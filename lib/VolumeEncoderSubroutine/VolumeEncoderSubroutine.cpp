@@ -47,8 +47,8 @@ void VolumeEncoderSubroutine::run() {
     if (_currentStateSW == LOW)
     { // Switch pushed
 
-        if (millis() - _lastButtonPress > 2000)
-        { // Over 50ms
+        if (millis() - _lastButtonPress > 1100)
+        { // Over 1.1s
             Consumer.write(MEDIA_VOLUME_MUTE);
 			delay(1000);
         }
