@@ -14,7 +14,7 @@
 #include "HID-Project.h"
 #include "JoystickMouseSubroutine.h"
 
-JoystickMouseSubroutine::JoystickMouseSubroutine(uint8_t horzPin, uint8_t vertPin, int invertMouse, int sensitivity, uint8_t leftClickPin, uint8_t rightClickPin, uint8_t middleClickPin){
+JoystickMouseSubroutine::JoystickMouseSubroutine(uint8_t horzPin, uint8_t vertPin, int invertMouse, int sensitivity, uint8_t leftClickPin, uint8_t rightClickPin, uint8_t middleClickPin, uint8_t leftLedPin, uint8_t rightLedPin, uint8_t middleLedPin){
     _horzPin = horzPin;
     _vertPin = vertPin;
     _invertMouse = invertMouse;
@@ -22,6 +22,9 @@ JoystickMouseSubroutine::JoystickMouseSubroutine(uint8_t horzPin, uint8_t vertPi
     _leftClickPin = leftClickPin;
     _rightClickPin = rightClickPin;
     _middleClickPin = middleClickPin;
+    _leftLedPin = leftLedPin;
+    _rightLedPin = rightLedPin;
+    _middleLedPin = middleLedPin;
 }
 
 void JoystickMouseSubroutine::init()
@@ -34,6 +37,9 @@ void JoystickMouseSubroutine::init()
   digitalWrite(_rightClickPin, HIGH);  // Pull button select pin high
   pinMode(_middleClickPin, INPUT);  // set button select pin as input
   digitalWrite(_middleClickPin, HIGH);  // Pull button select pin high
+  pinMode(_leftLedPin, OUTPUT);
+  pinMode(_rightLedPin, OUTPUT);
+  pinMode(_middleLedPin, OUTPUT);
   delay(1000);  // short delay to let outputs settle
   _vertZero = analogRead(_vertPin);  // get the initial values
   _horzZero = analogRead(_horzPin);  // Joystick should be in neutral position when reading these
@@ -49,38 +55,58 @@ void JoystickMouseSubroutine::run()
   if (_vertValue != 0)
     Mouse.move(0, (_invertMouse * (_vertValue / _sensitivity)), 0); // move mouse on y axis
   if (_horzValue != 0)
-    Mouse.move((_invertMouse * (_horzValue / _sensitivity)), 0, 0); // move mouse on x axis
+    Mouse.move((-_invertMouse * (_horzValue / _sensitivity)), 0, 0); // move mouse on x axis
 
-  if ((digitalRead(_leftClickPin) == 0) && (!_leftClickFlag))  // if the joystick button is pressed
+  buttonHandler(MOUSE_LEFT, true);
+  buttonHandler(MOUSE_RIGHT, true);
+  buttonHandler(MOUSE_MIDDLE, true);
+
+}
+
+void JoystickMouseSubroutine::buttonHandler(uint8_t mousePress, bool hasLED)
+{
+  byte clickPin;
+  byte *clickFlag;
+  byte ledPin;
+
+  switch (mousePress)
   {
-    _leftClickFlag = 1;
-    Mouse.press(MOUSE_LEFT);  // click the left button down
-  }else if ((digitalRead(_leftClickPin)) && (_leftClickFlag)) // if the joystick button is not pressed
-  {
-    _leftClickFlag = 0;
-    Mouse.release(MOUSE_LEFT);  // release the left button
+  case MOUSE_LEFT:
+    clickPin = _leftClickPin;
+    clickFlag = &_leftClickFlag;
+    if(hasLED){
+      ledPin = _leftLedPin;
+    }
+    break;
+  case MOUSE_RIGHT:
+    clickPin = _rightClickPin;
+    clickFlag = &_rightClickFlag;
+    if(hasLED){
+      ledPin = _rightLedPin;
+    }
+    break;
+  case MOUSE_MIDDLE:
+    clickPin = _middleClickPin;
+    clickFlag = &_middleClickFlag;
+    if(hasLED){
+      ledPin = _middleLedPin;
+    }
+    break;
   }
 
-  if ((digitalRead(_rightClickPin) == 0) && (!_rightClickFlag))  // if the joystick button is pressed
+  if ((digitalRead(clickPin) == 0) && (!*clickFlag))  // if the button is pressed
   {
-    _rightClickFlag = 1;
-    Mouse.press(MOUSE_RIGHT);  // click the left button down
-  }else if ((digitalRead(_rightClickPin)) && (_rightClickFlag)) // if the joystick button is not pressed
+    *clickFlag = 1;
+    if(hasLED){
+      digitalWrite(ledPin, HIGH);
+    }
+    Mouse.press(mousePress);  // click the button down
+  }else if ((digitalRead(clickPin)) && (*clickFlag)) // if the  button is not pressed
   {
-    _rightClickFlag = 0;
-    Mouse.release(MOUSE_RIGHT);  // release the left button
+    *clickFlag = 0;
+    if(hasLED){
+      digitalWrite(ledPin, LOW);
+    }
+    Mouse.release(mousePress);  // release the button
   }
-
-  if ((digitalRead(_middleClickPin) == 0) && (!_middleClickFlag))  // if the joystick button is pressed
-  {
-    _middleClickFlag = 1;
-    Mouse.press(MOUSE_MIDDLE);  // click the left button down
-  }else if ((digitalRead(_middleClickPin)) && (_middleClickFlag)) // if the joystick button is not pressed
-  {
-    _middleClickFlag = 0;
-    Mouse.release(MOUSE_MIDDLE);  // release the left button
-  }
-
-
-
 }
