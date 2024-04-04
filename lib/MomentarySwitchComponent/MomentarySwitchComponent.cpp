@@ -42,6 +42,7 @@ void MomentarySwitchComponent::handler()
       digitalWrite(_ledPin, HIGH);
     }
     Mouse.press(_mouseAction);  // click the button down
+    delay(100);
   }else if ((digitalRead(_clickPin)) && (_clickFlag)) // if the  button is not pressed
   {
     _clickFlag = 0;

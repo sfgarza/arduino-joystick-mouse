@@ -12,7 +12,7 @@ class JoystickMouseSubroutine {
          uint8_t vertPin,
          int invertMouse,
          int sensitivity,
-         Vector<MomentarySwitchComponent> *switchComponents
+         Vector<MomentarySwitchComponent> switchComponents
       );
       void init();
       void run();

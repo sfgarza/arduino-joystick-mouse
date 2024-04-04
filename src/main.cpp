@@ -14,7 +14,7 @@ MomentarySwitchComponent middleMouseSwitch(MIDDLECLICKPIN, MIDDLELEDPIN, MOUSE_M
 
 MomentarySwitchComponent switchComponents[] = {leftMouseSwitch, rightMouseSwitch, middleMouseSwitch };
 Vector<MomentarySwitchComponent> switchComponentsVector(switchComponents, sizeof(switchComponents));
-JoystickMouseSubroutine joystickMouseSubroutine(HORZPIN, VERTPIN, INVERT, SENSITIVITY, &switchComponentsVector);
+JoystickMouseSubroutine joystickMouseSubroutine(HORZPIN, VERTPIN, INVERT, SENSITIVITY, switchComponentsVector);
 
 //VolumeEncoderSubroutine volumeEncoderSubroutine(INPUTCLK, INPUTDT, INPUTSW);
 

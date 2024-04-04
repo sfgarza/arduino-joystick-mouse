@@ -15,12 +15,12 @@
 #include "Vector.h"
 #include "JoystickMouseSubroutine.h"
 
-JoystickMouseSubroutine::JoystickMouseSubroutine(uint8_t horzPin, uint8_t vertPin, int invertMouse, int sensitivity, Vector<MomentarySwitchComponent> *switchComponents ){
+JoystickMouseSubroutine::JoystickMouseSubroutine(uint8_t horzPin, uint8_t vertPin, int invertMouse, int sensitivity, Vector<MomentarySwitchComponent> switchComponents ){
     _horzPin = horzPin;
     _vertPin = vertPin;
     _invertMouse = invertMouse;
     _sensitivity = sensitivity;
-    _switchComponents = *switchComponents;
+    _switchComponents = switchComponents;
     _numSwitches = sizeof(_switchComponents);
 }
 
