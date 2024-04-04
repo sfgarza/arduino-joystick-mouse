@@ -14,8 +14,6 @@ void VolumeEncoderSubroutine::init() {
 	pinMode (_inputDT,INPUT);
 	pinMode(_inputSW, INPUT_PULLUP);
 
-	// Setup Serial Monitor
-	//Serial.begin (9600);
 	Consumer.begin();
 	Keyboard.begin();
 
