@@ -11,44 +11,55 @@
    as the mouse left click.
 */
 #include "Arduino.h"
-#include "HID-Project.h"
 #include "MomentarySwitchInterface.h"
 #include "MomentarySwitchComponent.h"
 
-MomentarySwitchComponent::MomentarySwitchComponent(uint8_t clickPin, uint8_t ledPin, uint8_t mouseAction):MomentarySwitchInterface(clickPin, ledPin)
-{
-    _clickFlag = 0;
-    _mouseAction = mouseAction;
-};
-
-MomentarySwitchComponent::MomentarySwitchComponent(uint8_t clickPin, uint8_t mouseAction):MomentarySwitchInterface(clickPin)
-{
-    _clickFlag = 0;
-    _mouseAction = mouseAction;
-};
 
 void MomentarySwitchComponent::init()
 {
   MomentarySwitchInterface::init();
-  Mouse.begin(); //Init mouse emulation
 }
 
-void MomentarySwitchComponent::handler()
+void MomentarySwitchComponent::momentaryPresshandler(void (*onClickCallback)(byte), void (*onReleaseCallback)(byte))
 {
-  if ((digitalRead(_clickPin) == 0) && (!_clickFlag))  // if the button is pressed
+  if ((digitalRead(_clickPin) == 0) && (!_clickFlag)) // if the button is pressed
   {
     _clickFlag = 1;
-    if(_hasLED){
+    if (_hasLED)
+    {
       digitalWrite(_ledPin, HIGH);
     }
-    Mouse.press(_mouseAction);  // click the button down
+    onClickCallback(_switchAction);
     delay(100);
-  }else if ((digitalRead(_clickPin)) && (_clickFlag)) // if the  button is not pressed
+  }
+  else if ((digitalRead(_clickPin)) && (_clickFlag)) // if the  button is not pressed
   {
     _clickFlag = 0;
-    if(_hasLED){
+    if (_hasLED)
+    {
       digitalWrite(_ledPin, LOW);
     }
-    Mouse.release(_mouseAction);  // release the button
+    onReleaseCallback(_switchAction);
+  }
+}
+
+void MomentarySwitchComponent::togglePresshandler(void (*onToggleCallback)(byte, byte ))
+{
+  _lastState = _currentState;           // save the last state
+  _currentState = digitalRead(_clickPin); // read new state
+
+  if (_lastState == HIGH && _currentState == LOW)
+  {
+
+    // toggle state of LED
+    _actionState = !_actionState;
+
+    if (_hasLED)
+    {
+      // control LED arccoding to the toggled state
+      digitalWrite(_ledPin, _actionState);
+    }
+    onToggleCallback(_switchAction, _actionState);
+    delay(50);
   }
 }

@@ -5,20 +5,12 @@
 #include "MomentarySwitchInterface.h"
 class MomentarySwitchComponent: public MomentarySwitchInterface {
    public:
-      MomentarySwitchComponent(
-         uint8_t clickPin,
-         uint8_t ledPin,
-         uint8_t mouseAction
-      );
-    public:
-      MomentarySwitchComponent(
-         uint8_t clickPin,
-         uint8_t mouseAction
-      );
+      MomentarySwitchComponent(uint8_t clickPin, uint8_t ledPin, uint8_t switchAction):MomentarySwitchInterface(clickPin, ledPin, switchAction){};
+      MomentarySwitchComponent(uint8_t clickPin, uint8_t switchAction):MomentarySwitchInterface(clickPin, switchAction){};
       void init();
       void handler();
-   private:
-      byte _mouseAction;
+      void momentaryPresshandler(void(*onClickCallback)(byte), void(*onReleaseCallback)(byte));
+      void togglePresshandler(void(*onToggleCallback)(byte, byte));
 };
 
 #endif

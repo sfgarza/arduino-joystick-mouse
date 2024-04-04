@@ -14,6 +14,9 @@ class JoystickMouseSubroutine {
       );
       void init();
       void run();
+      static void onClickCallback(byte action);
+      static void onReleaseCallback(byte action);
+      static void onToggleCallback(byte action, byte actionState);
    private:
       byte _numSwitches;
       JoystickComponent _joystickComponent;
