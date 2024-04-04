@@ -1,15 +1,3 @@
-/* HID Joystick Mouse Example
-   by: Jim Lindblom
-   date: 1/12/2012
-   license: MIT License - Feel free to use this code for any purpose.
-   No restrictions. Just keep this license if you go on to use this
-   code in your future endeavors! Reuse and share.
-
-   This is very simplistic code that allows you to turn the
-   SparkFun Thumb Joystick (http://www.sparkfun.com/products/9032)
-   into an HID Mouse. The select button on the joystick is set up
-   as the mouse left click.
-*/
 #include "Arduino.h"
 #include "MomentarySwitchInterface.h"
 #include "MomentarySwitchComponent.h"

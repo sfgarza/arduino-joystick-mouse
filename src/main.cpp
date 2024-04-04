@@ -4,7 +4,6 @@
 #include "JoystickMouseSubroutine.h"
 #include "VolumeEncoderSubroutine.h"
 #include "JoystickComponent.h"
-#include "MomentarySwitchInterface.h"
 #include "MomentarySwitchComponent.h"
 
 // Constants are defined in platformio.ini build_flags.
