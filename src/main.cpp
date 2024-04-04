@@ -3,10 +3,12 @@
 #include "HID-Project.h"
 #include "JoystickMouseSubroutine.h"
 #include "VolumeEncoderSubroutine.h"
+#include "JoystickComponent.h"
 #include "MomentarySwitchInterface.h"
 #include "MomentarySwitchComponent.h"
 
 // Constants are defined in platformio.ini build_flags.
+JoystickComponent joystickComponent(HORZPIN, VERTPIN, INVERTX, INVERTY, SENSITIVITY);
 MomentarySwitchComponent leftMouseSwitch(LEFTCLICKPIN, LEFTLEDPIN, MOUSE_LEFT);
 MomentarySwitchComponent rightMouseSwitch(RIGHTCLICKPIN, RIGHTLEDPIN, MOUSE_RIGHT);
 MomentarySwitchComponent middleMouseSwitch(MIDDLECLICKPIN, MIDDLELEDPIN, MOUSE_MIDDLE);
@@ -14,7 +16,7 @@ MomentarySwitchComponent middleMouseSwitch(MIDDLECLICKPIN, MIDDLELEDPIN, MOUSE_M
 
 MomentarySwitchComponent switchComponents[] = {leftMouseSwitch, rightMouseSwitch, middleMouseSwitch };
 Vector<MomentarySwitchComponent> switchComponentsVector(switchComponents, sizeof(switchComponents));
-JoystickMouseSubroutine joystickMouseSubroutine(HORZPIN, VERTPIN, INVERT, SENSITIVITY, switchComponentsVector);
+JoystickMouseSubroutine joystickMouseSubroutine(joystickComponent, switchComponentsVector);
 
 //VolumeEncoderSubroutine volumeEncoderSubroutine(INPUTCLK, INPUTDT, INPUTSW);
 

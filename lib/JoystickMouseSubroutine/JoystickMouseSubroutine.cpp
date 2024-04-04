@@ -14,42 +14,28 @@
 #include "HID-Project.h"
 #include "Vector.h"
 #include "JoystickMouseSubroutine.h"
+#include "JoystickComponent.h"
 
-JoystickMouseSubroutine::JoystickMouseSubroutine(uint8_t horzPin, uint8_t vertPin, int invertMouse, int sensitivity, Vector<MomentarySwitchComponent> switchComponents ){
-    _horzPin = horzPin;
-    _vertPin = vertPin;
-    _invertMouse = invertMouse;
-    _sensitivity = sensitivity;
+JoystickMouseSubroutine::JoystickMouseSubroutine(JoystickComponent joystickComponent, Vector<MomentarySwitchComponent> switchComponents ) : _joystickComponent{joystickComponent}, _switchComponents{switchComponents}
+{
+    _joystickComponent = joystickComponent;
     _switchComponents = switchComponents;
     _numSwitches = sizeof(_switchComponents);
 }
 
 void JoystickMouseSubroutine::init()
 {
+  _joystickComponent.init();
+
   for (byte i = 0; i < _numSwitches; i++){
     _switchComponents[i].init();
   }
 
-  pinMode(_horzPin, INPUT);  // Set both analog pins as inputs
-  pinMode(_vertPin, INPUT);
-
-  delay(1000);  // short delay to let outputs settle
-  _vertZero = analogRead(_vertPin);  // get the initial values
-  _horzZero = analogRead(_horzPin);  // Joystick should be in neutral position when reading these
-
-  Mouse.begin(); //Init mouse emulation
 }
 
 void JoystickMouseSubroutine::run()
 {
-  _vertValue = analogRead(_vertPin) - _vertZero;  // read vertical offset
-  _horzValue = analogRead(_horzPin) - _horzZero;  // read horizontal offset
-
-  if (_vertValue != 0)
-    Mouse.move(0, (_invertMouse * (_vertValue / _sensitivity)), 0); // move mouse on y axis
-  if (_horzValue != 0)
-    Mouse.move((-_invertMouse * (_horzValue / _sensitivity)), 0, 0); // move mouse on x axis
-
+  _joystickComponent.handler();
 
   for (byte i = 0; i < _numSwitches; i++){
     _switchComponents[i].handler();
