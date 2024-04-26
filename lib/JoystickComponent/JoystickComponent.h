@@ -10,11 +10,13 @@ class JoystickComponent {
          uint8_t horzPin,
          uint8_t vertPin,
          int invertX,
-         int invertY,
-         int sensitivity
+         int invertY
       );
       void init();
       void handler();
+      static void setSensitivity(int sensitivity);
+      static const int sensitivityPresets[3];
+      static int _sensitivity;
    private:
       byte _horzPin;
       byte _vertPin;
@@ -25,7 +27,6 @@ class JoystickComponent {
       int _horzValue;
       int _invertX;
       int _invertY;
-      int _sensitivity;
 };
 
 #endif

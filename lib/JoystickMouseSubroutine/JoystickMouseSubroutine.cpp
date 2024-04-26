@@ -24,27 +24,7 @@ void JoystickMouseSubroutine::run()
   _joystickComponent.handler();
 
   for (byte i = 0; i < _numSwitches; i++){
-    //_switchComponents[i].togglePresshandler(&onToggleCallback);
-    _switchComponents[i].momentaryPresshandler(&onClickCallback, &onReleaseCallback);
+    _switchComponents[i].momentaryPresshandler();
   }
 
-}
-
-void JoystickMouseSubroutine::onClickCallback(byte action)
-{
-    Mouse.press(action);  // click the button down
-}
-
-void JoystickMouseSubroutine::onReleaseCallback(byte action)
-{
-    Mouse.release(action);  // click the button down
-}
-
-void JoystickMouseSubroutine::onToggleCallback(byte action, byte actionState)
-{
-  if (actionState == HIGH ){
-    Mouse.press(action);  // click the button down
-  }else{
-    Mouse.release(action);
-  }
 }
