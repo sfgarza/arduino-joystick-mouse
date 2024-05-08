@@ -31,10 +31,12 @@ void JoystickComponent::handler()
   _vertValue = analogRead(_vertPin) - _vertZero;  // read vertical offset
   _horzValue = analogRead(_horzPin) - _horzZero;  // read horizontal offset
 
-  if (_vertValue != 0)
-    Mouse.move(0, (_invertX * (_vertValue / _sensitivity)), 0); // move mouse on y axis
-  if (_horzValue != 0)
-    Mouse.move((_invertY * (_horzValue / _sensitivity)), 0, 0); // move mouse on x axis
+  // Invert and calculate sensitivity
+  _vertValue = _invertY * (_vertValue / _sensitivity);
+  _horzValue = _invertX * (_horzValue / _sensitivity);
+
+  if (_vertValue != 0 || _horzValue != 0)
+    Mouse.move(_horzValue, _vertValue, 0); // move mouse on y axis
 
 }
 
