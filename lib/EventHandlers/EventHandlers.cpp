@@ -12,17 +12,13 @@ void onMouseReleaseHandler(uint8_t action){
 
 void onMouseSensitivityHandler(uint8_t action){
   static byte current = 0;
-  static byte presetSize = sizeof(JoystickComponent::sensitivityPresets)/sizeof(JoystickComponent::sensitivityPresets[0]) - 1;
+  static const byte presetCount = sizeof(JoystickComponent::sensitivityPresets)/sizeof(JoystickComponent::sensitivityPresets[0]);
 
-  // Reset current index to 0 after iterating through all presets.
-  if(current > presetSize){
-    current = 0;
-  }
+  // Update joystick sensitivity, then advance to the next preset index (wrapping).
+  JoystickComponent::setSensitivity(JoystickComponent::sensitivityPresets[current]);
+  current = (current + 1) % presetCount;
 
-  // Update joystick sensitivity, then set current to the next index.
-  JoystickComponent::setSensitivity(JoystickComponent::sensitivityPresets[current++]);
-
-  // Addional bounce delay
+  // Additional bounce delay
   delay(300);
 }
 

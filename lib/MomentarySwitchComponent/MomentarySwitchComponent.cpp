@@ -7,7 +7,7 @@ void MomentarySwitchComponent::init()
   MomentarySwitchInterface::init();
 }
 
-void MomentarySwitchComponent::momentaryPresshandler(){
+void MomentarySwitchComponent::momentaryPressHandler(){
   if ((digitalRead(_clickPin) == 0) && (!_clickFlag)) // if the button is pressed
   {
     _clickFlag = 1;
@@ -15,21 +15,21 @@ void MomentarySwitchComponent::momentaryPresshandler(){
     {
       digitalWrite(_ledPin, HIGH);
     }
-    _onClickCallback(_switchAction);
+    if (_onClickCallback) _onClickCallback(_switchAction);
     delay(100);
   }
-  else if ((digitalRead(_clickPin)) && (_clickFlag)) // if the  button is not pressed
+  else if ((digitalRead(_clickPin)) && (_clickFlag)) // if the button is not pressed
   {
     _clickFlag = 0;
     if (_hasLED)
     {
       digitalWrite(_ledPin, LOW);
     }
-    _onReleaseCallback(_switchAction);
+    if (_onReleaseCallback) _onReleaseCallback(_switchAction);
   }
 }
 
-void MomentarySwitchComponent::togglePresshandler()
+void MomentarySwitchComponent::togglePressHandler()
 {
   _lastState = _currentState;           // save the last state
   _currentState = digitalRead(_clickPin); // read new state
@@ -42,10 +42,10 @@ void MomentarySwitchComponent::togglePresshandler()
 
     if (_hasLED)
     {
-      // control LED arccoding to the toggled state
+      // control LED according to the toggled state
       digitalWrite(_ledPin, _actionState);
     }
-    _onToggleCallback(_switchAction, _actionState);
+    if (_onToggleCallback) _onToggleCallback(_switchAction, _actionState);
     delay(50);
   }
 }

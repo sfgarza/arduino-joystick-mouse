@@ -6,7 +6,7 @@
 
 JoystickMouseSubroutine::JoystickMouseSubroutine(JoystickComponent joystickComponent, Vector<MomentarySwitchComponent> switchComponents ) : _joystickComponent{joystickComponent}, _switchComponents{switchComponents}
 {
-    _numSwitches = sizeof(_switchComponents);
+    _numSwitches = _switchComponents.size();
 }
 
 void JoystickMouseSubroutine::init()
@@ -24,7 +24,7 @@ void JoystickMouseSubroutine::run()
   _joystickComponent.handler();
 
   for (byte i = 0; i < _numSwitches; i++){
-    _switchComponents[i].momentaryPresshandler();
+    _switchComponents[i].momentaryPressHandler();
   }
 
 }

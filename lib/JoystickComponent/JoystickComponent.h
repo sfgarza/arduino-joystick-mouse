@@ -20,7 +20,6 @@ class JoystickComponent {
    private:
       byte _horzPin;
       byte _vertPin;
-      byte _numSwitches;
       int _vertZero;
       int _horzZero;
       int _vertValue;

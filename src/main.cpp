@@ -2,7 +2,6 @@
 #include "Vector.h"
 #include "HID-Project.h"
 #include "JoystickMouseSubroutine.h"
-#include "VolumeEncoderSubroutine.h"
 #include "JoystickComponent.h"
 #include "MomentarySwitchComponent.h"
 #include "EventHandlers.h"
